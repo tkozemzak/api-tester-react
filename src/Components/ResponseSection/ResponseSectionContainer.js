@@ -1,20 +1,53 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
+import prettyBytes from 'pretty-bytes'
 
-const ResponseSectionContainer = () => {
+const ResponseSectionContainer = ({ responseData, responseTime }) => {
+  
+
+    const [responseDataExists, setResponseDataExists] = useState(false)
+    const [responseSize, setResponseSize] = useState("0 kb")
+
+    useEffect(() => {
+        if(responseData && responseData.status === 200) {
+            setResponseDataExists(true)
+            let size = prettyBytes(
+                JSON.stringify(responseData.data).length + JSON.stringify(responseData.headers).length
+            )
+            setResponseSize(size)
+        } 
+        else if (responseData && responseData.status === 404) {
+
+            setResponseDataExists(true)
+            let size = prettyBytes(
+                JSON.stringify(responseData).length
+            )
+            setResponseSize(size)
+        } else {
+            setResponseSize("0 B")
+        }
+    }, [responseData])
+
+
+
     return (
-        <div className="mt-5">
-            <h3>Response:</h3>
-            <div className="d-flex my-2">
-                <div className="me-3">
-                    Status: <span>code</span>
+        <div className="mt-5" style={{padding: "10px"}}>
+            { responseDataExists &&
+                <>
+                <h3>Response:</h3>
+            <div>
+                <div >
+                    Status: <span>{responseData.status}</span>
                 </div>
-                <div className="me-3">
-                    Time: <span>time</span>ms
+                <div >
+                    Time: <span>{responseTime}</span>
                 </div>
-                <div className="me-3">
-                    Size: <span>size</span>
+                <div >
+                    Size: <span>{responseSize}</span>
                 </div>
             </div>
+            </>
+            }
+            
         </div>
     )
 }
