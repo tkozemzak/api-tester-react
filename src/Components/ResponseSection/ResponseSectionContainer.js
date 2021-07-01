@@ -5,7 +5,7 @@ const ResponseSectionContainer = ({ responseData, responseTime }) => {
   
 
     const [responseDataExists, setResponseDataExists] = useState(false)
-    const [responseSize, setResponseSize] = useState("0 kb")
+    const [responseSize, setResponseSize] = useState("0 B")
 
     useEffect(() => {
         if(responseData && responseData.status === 200) {
@@ -22,15 +22,13 @@ const ResponseSectionContainer = ({ responseData, responseTime }) => {
                 JSON.stringify(responseData).length
             )
             setResponseSize(size)
-        } else {
-            setResponseSize("0 B")
-        }
+        } 
     }, [responseData])
 
 
 
     return (
-        <div className="mt-5" style={{padding: "10px"}}>
+        <div className="mt-5" style={{padding: "20px"}}>
             { responseDataExists &&
                 <>
                 <h3>Response:</h3>
